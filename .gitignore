@@ -1,0 +1,6 @@
+composer.lock
+vendor/
+public/pear
+public/.*
+application/.*
+!.gitignore
