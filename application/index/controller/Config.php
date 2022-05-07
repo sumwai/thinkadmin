@@ -13,9 +13,11 @@ class Config
 {
 
   function test(){
-    dump(Rule::rules());
-  }
-  
+    $a = (Rule::tree());
+    foreach ($a as $item){
+      printf('%s<br>', $item['title']);
+    }
+  } 
   
   function menu(){
     header("Content-type: application/json; charset=utf-8");

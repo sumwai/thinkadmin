@@ -6,7 +6,7 @@ class Rule
 {
 
 
-  public static function rules($data = [], $pid = 0, $i = 0){
+  public static function rules($data = [], $pid = 0){
 
     if ($data === []){
       $data = Db::name("rules")->select();   
@@ -19,7 +19,7 @@ class Rule
 
       if ($item['pid'] == $pid){
         // get children from item.id
-        $children = self::rules($data, $item['id'], $i+1);
+        $children = self::rules($data, $item['id']);
         // if has children 
         if ($children) {
           // add children node
@@ -41,8 +41,44 @@ class Rule
   protected static function parse_icon($icon){
     $icons = explode(' ', $icon);
     foreach($icons as &$item){
-      $item = 'layui-icon-' . $item;
+      if (($index = strpos($item, '.')) !== false){
+        $icon_type = substr($item, 0, $index);
+        $icon_name = substr($item, $index+1);
+      }else{
+        $icon_type = "";
+      }
+      switch($icon_type) {
+        case 'layui':
+          $item = 'layui-icon layui-icon-'.$icon_name;
+          break;
+        case 'pear':
+          $item = 'pear-icon pear-icon-'.$icon_name;
+          break;
+        default:
+      }
     }
-    return 'layui-icon ' . implode(' ', $icons);
+    return implode(' ', $icons);
   }
+
+  public static function tree(&$rules = [], $r = 0, &$result = []){
+    $rules = ($rules === []) ? self::rules() : $rules;
+
+    foreach ($rules as $i => &$rule){
+      $is_end = $i === count($rules) - 1;
+
+      $temp = $rule;
+      $temp['spacer'] = spacer($is_end, $r, true);
+      $temp['title'] = sprintf('%s%s', $temp['spacer'], $temp['title']);
+      unset($temp['children']);
+      $result[] = $temp;
+      
+      if (isset($rule['children'])){
+        self::tree($rule['children'], $r+1, $result);
+      }
+
+    }
+    
+    return $result;
+  }
+
 }
