@@ -2,6 +2,8 @@
 
 use think\Db;
 
+use app\admin\model\Rules;
+
 class Rule
 {
 
@@ -9,7 +11,7 @@ class Rule
   public static function rules($data = [], $pid = 0){
 
     if ($data === []){
-      $data = Db::name("rules")->select();   
+      $data = Rules::select(); 
     }
 
     $result = [];
@@ -35,7 +37,7 @@ class Rule
 
     }
 
-    return $result;
+    return collection($result)->toArray();
   }
   
   protected static function parse_icon($icon){
@@ -71,14 +73,12 @@ class Rule
       $temp['title'] = sprintf('%s%s', $temp['spacer'], $temp['title']);
       unset($temp['children']);
       $result[] = $temp;
-      
       if (isset($rule['children'])){
         self::tree($rule['children'], $r+1, $result);
       }
-
     }
     
-    return $result;
+    return collection($result)->toArray();
   }
 
 }
