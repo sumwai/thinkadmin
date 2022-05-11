@@ -39,3 +39,29 @@ function spacer($l = 0, $len = 2, $space = true){
   return sprintf('%s%s', $start, str_pad('', $len * strlen($middle), $middle));
 
 }
+
+function parse_icon($icon){
+    $icons = explode(' ', $icon);
+    foreach($icons as &$item){
+      $icon_type = '';
+      $icon_name = $item;
+      if (($index = strpos($item, '.')) !== false){
+        $icon_type = substr($item, 0, $index);
+        $icon_name = substr($item, $index+1);
+      }
+      switch($icon_type) {
+        case 'layui':
+          $item = 'layui-icon layui-icon-'.$icon_name;
+          break;
+        case 'pear':
+          $item = 'pear-icon pear-icon-'.$icon_name;
+          break;
+        case '': 
+          break;
+        default:
+      }
+    }
+    return implode(' ', $icons);
+  }
+
+

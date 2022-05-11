@@ -2,67 +2,49 @@
 
 use think\Db;
 
-use app\admin\model\Rules;
+use app\common\model\Rules;
 
 class Rule
 {
+  public static function backend(){
+    $instance = new self();
+    $instance->data = Rules::backend();
+    return $instance;
+  }
+  public static function frontend(){
+    $instance = new self();
+    $instance->data = Rules::frontend();
+    return $instance;
+  }
 
-
-  public static function rules($data = [], $pid = 0){
-
+  public function rules($data = [], $pid = 0){
     if ($data === []){
-      $data = Rules::select(); 
+      $data = $this->data;
     }
-
     $result = [];
     foreach ($data as $item){
-      // parse icon
-      $item['icon'] = self::parse_icon($item['icon']);
-
+      // 解析图标 
+      $item['icon'] = parse_icon($item['icon']);
+              $item['rule'] = url($item['rule']);
       if ($item['pid'] == $pid){
-        // get children from item.id
+        // 获取当前项的子菜单
         $children = self::rules($data, $item['id']);
-        // if has children 
+        // 如果含有子菜单
         if ($children) {
-          // add children node
+          // 加入子菜单到children节点
           $item['children'] = $children; 
         }
-        // if has children, type = 0, else type = 1
+        // 如果有子节点，设置type为0，反之为1
         $item['type'] = !$children;
-        // if has children, href = '', else href = item.rule
+        // 如果有子节点，设置href为空，否则为当前项的规则地址
         $item['href'] = $children ? '' : $item['rule'];
-
         $result[] = $item;
       }
-
     }
-
     return collection($result)->toArray();
   }
   
-  protected static function parse_icon($icon){
-    $icons = explode(' ', $icon);
-    foreach($icons as &$item){
-      if (($index = strpos($item, '.')) !== false){
-        $icon_type = substr($item, 0, $index);
-        $icon_name = substr($item, $index+1);
-      }else{
-        $icon_type = "";
-      }
-      switch($icon_type) {
-        case 'layui':
-          $item = 'layui-icon layui-icon-'.$icon_name;
-          break;
-        case 'pear':
-          $item = 'pear-icon pear-icon-'.$icon_name;
-          break;
-        default:
-      }
-    }
-    return implode(' ', $icons);
-  }
-
-  public static function tree(&$rules = [], $r = 0, &$result = []){
+  public function tree(&$rules = [], $r = 0, &$result = []){
     $rules = ($rules === []) ? self::rules() : $rules;
 
     foreach ($rules as $i => &$rule){

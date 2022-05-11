@@ -2,17 +2,16 @@
 
 namespace app\admin\model;
 
-use think\Model;
-use function explode;
+use app\common\model\Backend;
 
-class AuthGroup extends Model
+class AuthGroup extends Backend 
 {
   protected $name = 'auth_group';
   protected $pk = 'id';
 
   public function getRulesAttr($value = ''){
     $ids = explode(',', $value);
-    return Rules::getRuleTitles($ids);
+    return \app\common\model\Rules::getRuleTitles($ids);
   }
 
 }

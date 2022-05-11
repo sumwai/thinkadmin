@@ -1,10 +1,10 @@
 <?php
 
-namespace app\admin\model;
+namespace app\common\model;
 
 use think\Model;
 
-class Rules extends Model
+class Rules extends Model 
 {
   protected $name = 'rules';
   protected $pk = 'id';
@@ -20,4 +20,14 @@ class Rules extends Model
 
     return implode($sep, $result);
   }
+
+  public static function frontend(){
+    return self::where('useto', Frontend::$useto)->select();
+  }
+
+
+  public static function backend(){
+    return self::where('useto', Backend::$useto)->select();
+  }
+
 }

@@ -2,14 +2,14 @@
 
 namespace app\admin\controller;
 
-use \Rule;
+use Rule;
 
 class Menu
 {
 
   public function Index($page = 0, $limit = 0){
     if ($page && $limit) {
-      $data = Rule::tree();
+      $data = Rule::backend()->tree();
       return json([
         'code' => 0,
         'data' => $data,
