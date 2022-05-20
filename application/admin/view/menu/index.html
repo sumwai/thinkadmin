@@ -1,179 +1,189 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <title>数据表格</title>
+    <link rel="stylesheet" href="__PEAR__/css/pear.css" />
+  </head>
 
-<head>
-  <meta charset="utf-8">
-  <title>数据表格</title>
-  <link rel="stylesheet" href="__PEAR__/css/pear.css" />
-</head>
-
-<body class="pear-container">
-
-  <div class="layui-card">
-    <div class="layui-card-body">
-      <table id="user-table" lay-filter="user-table"></table>
+  <body class="pear-container">
+    <div class="layui-card">
+      <div class="layui-card-body">
+        <table id="user-table" lay-filter="user-table"></table>
+      </div>
     </div>
-  </div>
 
-  <div style="display: none;">
-    <div class="layer-top">
-      <br />
-      <h3>上侧弹层内容...</h3>
+    <div style="display: none">
+      <div class="layer-top">
+        <br />
+        <h3>上侧弹层内容...</h3>
+      </div>
     </div>
-  </div>
-</body>
+  </body>
 
-<script type="text/html" id="user-toolbar">
+  <script type="text/html" id="user-toolbar">
     <button class="pear-btn pear-btn-primary pear-btn-md" lay-event="add">
       <i class="layui-icon layui-icon-add-1"></i>新增
     </button>
-    <button class="pear-btn pear-btn-danger pear-btn-md" lay-event="batchRemove">
+    <button
+      class="pear-btn pear-btn-danger pear-btn-md"
+      lay-event="batchRemove"
+    >
       <i class="layui-icon layui-icon-delete"></i>删除
     </button>
-</script>
-
-<script type="text/html" id="user-bar">
-    <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="edit"><i
-          class="layui-icon layui-icon-edit"></i></button>
-      <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove"><i
-          class="layui-icon layui-icon-delete"></i></button>
   </script>
 
-
-<script type="text/html" id="status">
-    <input type="checkbox" name="enable" value="{{d.id}}" lay-skin="switch" lay-text="Show|Hidden" lay-filter="status"
-        checked="{{ d.enable == 0 ? 'true' : 'false' }}">
+  <script type="text/html" id="user-bar">
+    <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="edit">
+      <i class="layui-icon layui-icon-edit"></i>
+    </button>
+    <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove">
+      <i class="layui-icon layui-icon-delete"></i>
+    </button>
   </script>
 
+  <script type="text/html" id="status">
+    <input
+      type="checkbox"
+      name="enable"
+      value="{{d.id}}"
+      lay-skin="switch"
+      lay-text="Show|Hidden"
+      lay-filter="status"
+      checked="{{ d.enable == 0 ? 'true' : 'false' }}"
+    />
+  </script>
 
-
-<script type="text/html" id="icon">
+  <script type="text/html" id="icon">
     {{#if (d.icon !== '') { }}
-      <span class="{{d.icon}}"></span>
-    {{# }else { }}
-      {{d.icon}}
-    {{# } }}
-</script>
+    <span class="{{d.icon}}"></span>
+    {{# }else { }} {{d.icon}} {{# } }}
+  </script>
 
-<script src="__LAYUI__/layui.js"></script>
-<script src="__PEAR__/pear.js"></script>
-<script>
-  layui.use(['table', 'form', 'jquery', 'drawer', 'dropdown'], function () {
-    let table = layui.table;
-    let form = layui.form;
-    let $ = layui.jquery;
-    let drawer = layui.drawer;
-    let dropdown = layui.dropdown;
+  <script src="__LAYUI__/layui.js"></script>
+  <script src="__PEAR__/pear.js"></script>
+  <script>
+    layui.use(['table', 'form', 'jquery', 'drawer', 'dropdown'], function () {
+      let table = layui.table;
+      let form = layui.form;
+      let $ = layui.jquery;
+      let drawer = layui.drawer;
+      let dropdown = layui.dropdown;
 
+      let cols = [
+        [
+          {
+            type: 'checkbox',
+          },
+          {
+            title: 'ID',
+            field: 'id',
+            align: 'center',
+            width: 100,
+          },
+          {
+            title: '图标',
+            field: 'icon',
+            align: 'center',
+            width: 60,
+            templet: '#icon',
+          },
+          {
+            title: '标题',
+            field: 'title',
+            width: 260,
+          },
+          {
+            title: '权限',
+            field: 'rule',
+          },
+          {
+            title: '状态',
+            field: 'status',
+            align: 'center',
+            templet: '#status',
+            width: 110,
+          },
+          {
+            title: '操作',
+            toolbar: '#user-bar',
+            align: 'left',
+            width: 100,
+            fixed: 'right',
+          },
+        ],
+      ];
 
-    let cols = [[
-      {
-        type: 'checkbox'
-      },
-      {
-        title: 'ID',
-        field: 'id',
-        align: 'center',
-        width: 100
-      },
-      {
-        title: '图标',
-        field: 'icon',
-        align: 'center',
-        width: 60,
-        templet: '#icon'
-      },
-      {
-        title: '标题',
-        field: 'title',
-        width: 260,
-      },
-      {
-        title: '权限',
-        field: 'rule',
-      },
-      {
-        title: '状态',
-        field: 'status',
-        align: 'center',
-        templet: '#status',
-        width: 110
-      },
-      {
-        title: '操作',
-        toolbar: '#user-bar',
-        align: 'left',
-        width: 100,
-        fixed: 'right'
-      }
-    ]]
-
-    table.render({
-      elem: '#user-table',
-      url: '{:url("admin/menu/index")}',
-      page: false,
-      cols: cols,
-      toolbar: '#user-toolbar',
-      defaultToolbar: [],
-      done: function (res, curr, count) {
-      }
-    });
-
-    table.on('tool(user-table)', function (obj) {
-      if (obj.event === 'remove') {
-        window.remove(obj);
-      } else if (obj.event === 'edit') {
-        window.edit(obj);
-      }
-    });
-
-    table.on('toolbar(user-table)', function (obj) {
-      if (obj.event === 'add') {
-        window.add();
-      } else if (obj.event === 'refresh') {
-        window.refresh();
-      } else if (obj.event === 'batchRemove') {
-        window.batchRemove(obj);
-      }
-    });
-
-    form.on('submit(user-query)', function (data) {
-      table.reload('user-table', {
-        where: data.field
-      })
-      return false;
-    });
-
-    form.on('switch(user-enable)', function (obj) {
-      layer.tips(this.value + ' ' + this.name + '：' + obj.elem.checked, obj.othis);
-    });
-
-    window.add = function () {
-      drawer.open({
-        direction: "top",
-        dom: ".layer-top",
-        distance: "30%"
+      table.render({
+        elem: '#user-table',
+        url: '{:url("admin/menu/index")}',
+        page: false,
+        cols: cols,
+        toolbar: '#user-toolbar',
+        defaultToolbar: [],
+        done: function (res, curr, count) {},
       });
-    }
 
-    window.edit = function (obj) {
-      layer.msg("修改");
-    }
-
-    window.remove = function (obj) {
-      layer.confirm('确定要删除该用户', {
-        icon: 3,
-        title: '提示'
-      }, function (index) {
-        layer.close(index);
+      table.on('tool(user-table)', function (obj) {
+        if (obj.event === 'remove') {
+          window.remove(obj);
+        } else if (obj.event === 'edit') {
+          window.edit(obj);
+        }
       });
-    }
 
-    window.refresh = function (param) {
-      table.reload('user-table');
-    }
+      table.on('toolbar(user-table)', function (obj) {
+        if (obj.event === 'add') {
+          window.add();
+        } else if (obj.event === 'refresh') {
+          window.refresh();
+        } else if (obj.event === 'batchRemove') {
+          window.batchRemove(obj);
+        }
+      });
 
-  })
-</script>
+      form.on('submit(user-query)', function (data) {
+        table.reload('user-table', {
+          where: data.field,
+        });
+        return false;
+      });
 
+      form.on('switch(user-enable)', function (obj) {
+        layer.tips(
+          this.value + ' ' + this.name + '：' + obj.elem.checked,
+          obj.othis
+        );
+      });
+
+      window.add = function () {
+        drawer.open({
+          direction: 'top',
+          dom: '.layer-top',
+          distance: '30%',
+        });
+      };
+
+      window.edit = function (obj) {
+        layer.msg('修改');
+      };
+
+      window.remove = function (obj) {
+        layer.confirm(
+          '确定要删除该用户',
+          {
+            icon: 3,
+            title: '提示',
+          },
+          function (index) {
+            layer.close(index);
+          }
+        );
+      };
+
+      window.refresh = function (param) {
+        table.reload('user-table');
+      };
+    });
+  </script>
 </html>

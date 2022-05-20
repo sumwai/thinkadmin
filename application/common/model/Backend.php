@@ -6,6 +6,5 @@ use think\Model;
 
 class Backend extends Model
 {
-  public static $useto = '1';
+    public static $useto = '1';
 }
-

@@ -6,5 +6,5 @@ use think\Model;
 
 class Frontend extends Model
 {
-  public static $useto = '0';
+    public static $useto = '0';
 }
